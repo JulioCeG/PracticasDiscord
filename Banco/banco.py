@@ -27,45 +27,26 @@ class Bank():
 
     # Logueo con su validacion de intentos maximos
     def login(self, user_name, user_password):
-        user = self.user_exist(user_name)
+        # if user:
+        for _ in range(self.max_attempts):
+            user = self.user_exist(user_name)
+            if user and user.password == user_password:
+                self.session = user
+                self.attempts = 0  # Reiniciar el contador de intentos al iniciar sesión exitosamente
+                return True
+            else:
+                self.attempts += 1
+                print('Error: Usuario y/o contraseña incorrectos')
+                remaining_attempts = self.max_attempts - self.attempts
 
-        if user:
-            for _ in range(self.max_attempts):
-                if user.password == user_password:
-                    self.session = user
-                    self.attempts = 0  # Reiniciar el contador de intentos al iniciar sesión exitosamente
-                    return True
+                if remaining_attempts > 0:
+                    print(f'Tiene {remaining_attempts} más para intentarlo.')
+                    user_name = input('Usuario: ')  # Solicitar nuevamente el usuario
+                    user_password = input('Contraseña: ')  # Solicitar nuevamente la contraseña
                 else:
-                    self.attempts += 1
-                    print('Error: Contraseña incorrecta')
-                    remaining_attempts = self.max_attempts - self.attempts
-                    if remaining_attempts > 0:
-                        print(f'Tiene {remaining_attempts} más para intentarlo.')
-                        user_password = input('Contraseña: ')  # Solicitar nuevamente la contraseña
-                    else:
-                        print(f"Superó la cantidad de intentos fallidos ({self.attempts}). Su cuenta ha sido bloqueada.")
-                        break  # Salir del bucle después de superar los intentos máximos
-        else:
-            self.attempts += 1
-            print("Usuario inexistente. Por favor, vuelva a intentarlo.")
-            remaining_attempts = self.max_attempts - self.attempts
-            while remaining_attempts > 0:
-                print(f'Tiene {remaining_attempts} más para intentarlo.')
-                user_name = input('Usuario: ')  # Solicitar nuevamente el usuario
-                user_password = input('Contraseña: ')  # Solicitar nuevamente la contraseña
-                user = self.user_exist(user_name)
-                if user and user.password == user_password:
-                    self.session = user
-                    self.attempts = 0
-                    return True
-                else:
-                    print('Error: Contraseña incorrecta. Intente nuevamente.')
-                    self.attempts += 1
-                    remaining_attempts = self.max_attempts - self.attempts
-
-            print(f"Superó la cantidad de intentos fallidos ({self.attempts}). Su cuenta ha sido bloqueada.")
-
-        return False
+                    print(f"Superó la cantidad de intentos fallidos ({self.attempts}). Su cuenta ha sido bloqueada.")
+                    break  # Salir del bucle después de superar los intentos máximos
+        return False       
       
     # Chequeo de saldo suficiente
     def enough_mount(self, mount):
