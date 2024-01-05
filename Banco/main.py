@@ -6,10 +6,8 @@
     * The system must allow users to deposit, withdraw, view, and transfer money.
     * The system must display a menu for users to perform transactions.
 
-Descripción:
-Este programa simula un sistema de gestion de un banco online,
 Caracteristicas implementadas:
-    * Logueo de usuarios
+    * Logueo de usuarios. Maximo de 3 intentos erroneos
     * Posibilidad de ingresar, extraer o transferir dinero
     * Desplegar un menu para realizar esas acciones
 """
